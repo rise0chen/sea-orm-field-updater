@@ -19,14 +19,14 @@ pub fn field_updater(input: proc_macro::TokenStream) -> proc_macro::TokenStream 
     });
 
     let str2col_branch = fields.iter().map(|(_vis, ident, _ty)| {
-        let ident_name = ident.to_string();
+        let ident_name = convert_ident::to_normal_ident(&ident.to_string());
         let ident_ty = Ident::new(&ident_name.to_upper_camel_case(), Span::call_site());
         quote! {
             #ident_name => Some(Column::#ident_ty)
         }
     });
     let field2cv_branch = fields.iter().map(|(_vis, ident, _ty)| {
-        let ident_name = ident.to_string();
+        let ident_name = convert_ident::to_normal_ident(&ident.to_string());
         let ident_ty = Ident::new(&ident_name.to_upper_camel_case(), Span::call_site());
         quote! {
             #field_enum_ident::#ident(v) => (Column::#ident_ty, Expr::value(v))
